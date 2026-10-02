@@ -216,19 +216,18 @@ class EPD_4in2_B:
         return test_r
 
     """
+    def _reverse_rows(self, buffer):
+        """Reverse the existing 50-byte rows, retaining partial-row behavior."""
+        reversed_rows = b""
+        for offset in range(0, len(buffer), 50):
+            reversed_rows = buffer[offset:offset + 50] + reversed_rows
+        return reversed_rows
+
     def test_blk(self):
-        b = b""
-        for i in range(0, len(self.buffer_black), 50):
-            b = self.buffer_black[i:i + 50] + b
-        return b
+        return self._reverse_rows(self.buffer_black)
 
     def test_red(self):
-        b = b""
-        for i in range(0, len(self.buffer_red), 50):
-            b = self.buffer_red[i:i + 50] + b
-        return b
-
-
+        return self._reverse_rows(self.buffer_red)
 
     def Sleep(self):
         self.send_command(0X50) 
